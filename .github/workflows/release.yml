@@ -5,11 +5,13 @@ on:
     types: [created]
 
 permissions:
-    contents: write
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      hash: ${{ steps.hash.outputs.hash }}
     steps:
     - uses: actions/checkout@v4.1.0
     - uses: bazelbuild/setup-bazelisk@v2.0.0
@@ -20,9 +22,25 @@ jobs:
         name: hello
         if-no-files-found: error
         retention-days: 1
+    - id: hash
+      run: |
+        set -euo pipefail
+        sha256sum bazel-bin/src/hello > checksums
+        echo "hash=$(cat checksums | base64 -w0)" >> "${GITHUB_OUTPUT}"
+
+  provenance:
+    needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.4.0
+    with:
+      base64-subjects: "${{ needs.build.outputs.hash }}"
+      upload-assets: true
 
   release:
-    needs: [build]
+    needs: [build, provenance]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
