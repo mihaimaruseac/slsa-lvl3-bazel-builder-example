@@ -26,6 +26,6 @@ jobs:
       - uses: actions/download-artifact@v3.0.2
         with:
           name: hello
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release
         with:
           files: hello
