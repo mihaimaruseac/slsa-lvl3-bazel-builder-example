@@ -1,12 +1,11 @@
 name: Release
 on:
   workflow_dispatch:
-  release:
-    types: [created]
+  release: types: [created]
 
 jobs:
   build:
     steps:
-    - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
-    - uses: bazelbuild/setup-bazelisk@95c9bf48d0c570bb3e28e57108f3450cd67c1a44 # v2.0.0
-    - bazel build //... && mv bazel-bin/src/hello .
+    - uses: actions/checkout@v4.1.0
+    - uses: bazelbuild/setup-bazelisk@v2.0.0
+    - run: bazel build //... && mv bazel-bin/src/hello .
