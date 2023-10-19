@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4.1.0
     - uses: bazelbuild/setup-bazelisk@v2.0.0
