@@ -13,7 +13,7 @@ jobs:
     outputs:
       hash: ${{ steps.hash.outputs.hash }}
     steps:
-    - uses: actions/checkout@v4.1.0
+    - uses: actions/checkout@v6.0.2
     - uses: bazelbuild/setup-bazelisk@v2.0.0
     - run: bazel build //...
     - uses: actions/upload-artifact@v3.1.3
